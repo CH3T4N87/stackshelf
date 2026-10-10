@@ -5,6 +5,8 @@ import { errorHandler } from "./middlewares/errorHandler.js";
 import { requireHeader } from "./middlewares/requireHeader.js";
 import type { Member } from "./modules/members/schema.js";
 import { createMembersRouter } from "./modules/members/routes.js";
+import { createMembersRepo } from "./modules/members/repo.js";
+import { createMembersService } from "./modules/members/service.js";
 
 const app = express();
 
@@ -21,7 +23,9 @@ app.get("/health",requireHeader("x-api-key"), (req: Request, res: Response) => {
 });
 
 const membersStore = new Map<string, Member>();
-app.use("/members", createMembersRouter(membersStore));
+const membersRepo = createMembersRepo(membersStore);
+const membersService = createMembersService(membersRepo)
+app.use("/members", createMembersRouter(membersService));
 
 app.use(notFound);
 app.use(errorHandler);
