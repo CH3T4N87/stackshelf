@@ -14,6 +14,8 @@ export const createMembersService = (repo: MemberRepo) => {
     }
 
     const createMember = async (input: NewMember): Promise<Member> => {
+        const member = await repo.findByEmail(input.email);
+        if(member) throw createAppError(409, "member already exists")
         return await repo.create(input);
     }
 
