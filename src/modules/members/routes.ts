@@ -2,13 +2,11 @@ import express from "express";
 import type { Router, Request, Response, NextFunction } from "express";
 import type { Member } from "./schema.js";
 import { createMembersRepo } from "./repo.js";
-import { createMembersService } from "./service.js";
+import { createMembersService, type MemberService } from "./service.js";
 import { createAppError } from "../../errors/app-error.js";
 
 
-export const createMembersRouter = (store: Map<string, Member>): Router => {
-    const repo = createMembersRepo(store);
-    const service = createMembersService(repo);
+export const createMembersRouter = (service: MemberService): Router => {
     const membersRouter = express.Router();
 
     membersRouter.get("/", async (req: Request, res: Response) => {
