@@ -1,4 +1,4 @@
- interface Entity {
+interface Entity {
     id: string;
     createdAt: Date
 }
@@ -11,7 +11,7 @@ export const createInMemoryRepository = <T extends Entity>(store: Map<string, T>
         return store.get(id);
     }
     const create = async (input: Omit<T, keyof Entity>): Promise<T> => {
-        const newEntity = { id: crypto.randomUUID(), ...input, createdAt: new Date() } as T;
+        const newEntity = { ...input, id: crypto.randomUUID() as string, createdAt: new Date() } as T;
         store.set(newEntity.id, newEntity);
         return newEntity;
     }
