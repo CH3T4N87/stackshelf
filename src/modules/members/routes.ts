@@ -2,6 +2,8 @@ import express from "express";
 import type { Router, Request, Response, NextFunction } from "express";
 import type { MemberService } from "./service.js";
 import { createAppError } from "../../errors/app-error.js";
+import { validateBody } from "../../middlewares/validateBody.js";
+import { ZNewMember } from "./schema.js";
 
 
 export const createMembersRouter = (service: MemberService): Router => {
@@ -19,12 +21,8 @@ export const createMembersRouter = (service: MemberService): Router => {
         res.status(200).json(member);
     });
 
-    membersRouter.post("/", async (req: Request, res: Response, next: NextFunction) => {
-        const { name, email } = req.body ?? {};
-        if (!name || !email) {
-            return next(createAppError(400, "name and email are required"));
-        }
-        const member = await service.createMember({ name, email });
+    membersRouter.post("/",validateBody(ZNewMember), async (req: Request, res: Response) => {
+        const member = await service.createMember(req.body);
         res.status(201).json(member);
     });
 
