@@ -4,6 +4,7 @@ import type { MemberService } from "./service.js";
 import { createAppError } from "../../errors/app-error.js";
 import { validateBody } from "../../middlewares/validateBody.js";
 import { ZNewMember } from "./schema.js";
+import { withValidateBody } from "../../utils/withValidatedBody.js";
 
 
 export const createMembersRouter = (service: MemberService): Router => {
@@ -21,10 +22,10 @@ export const createMembersRouter = (service: MemberService): Router => {
         res.status(200).json(member);
     });
 
-    membersRouter.post("/",validateBody(ZNewMember), async (req: Request, res: Response) => {
+    membersRouter.post("/", ...withValidateBody(ZNewMember, async (req, res) => {
         const member = await service.createMember(req.body);
         res.status(201).json(member);
-    });
+    }));
 
     membersRouter.delete("/:id", async (req: Request<{ id: string }>, res: Response, next: NextFunction) => {
         const { id } = req.params;
