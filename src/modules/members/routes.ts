@@ -2,7 +2,6 @@ import express from "express";
 import type { Router, Request, Response, NextFunction } from "express";
 import type { MemberService } from "./service.js";
 import { createAppError } from "../../errors/app-error.js";
-import { validateBody } from "../../middlewares/validateBody.js";
 import { ZNewMember } from "./schema.js";
 import { withValidateBody } from "../../utils/withValidatedBody.js";
 
